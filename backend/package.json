@@ -1,0 +1,25 @@
+{
+  "name": "backend",
+  "version": "1.0.0",
+  "description": "",
+  "main": "./server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon ./server.js"
+  },
+  "keywords": [],
+  "author": "LUIZ CARLOS DA SILVA",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "cors": "^2.8.5",
+    "express": "^4.17.1",
+    "express-autoroute": "^2.1.1",
+    "knex": "^0.21.1",
+    "path": "^0.12.7",
+    "sqlite3": "^4.2.0"
+  },
+  "devDependencies": {
+    "winston": "^3.2.1"
+  }
+}
