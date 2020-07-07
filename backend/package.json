@@ -17,6 +17,7 @@
     "express-autoroute": "^2.1.1",
     "knex": "^0.21.1",
     "path": "^0.12.7",
+    "react-router-dom": "^5.2.0",
     "sqlite3": "^4.2.0"
   },
   "devDependencies": {
