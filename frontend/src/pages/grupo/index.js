@@ -13,6 +13,18 @@ import {
 import MenuSuperior from "../../components/navbar";
 
 export default class Grupo extends Component {
+  constructor() {
+    super();
+    this.state = {
+      teste: ""
+    };
+  }
+
+  //  - funcoes aqui
+  gravarGrupoMuscular = () => {
+    alert(this.state.teste);
+  };
+
   render() {
     return (
       <div>
@@ -28,11 +40,9 @@ export default class Grupo extends Component {
               <Field>
                 <Label>Nome</Label>
                 <Control>
-                  <Input type="text" placeholder="Text input" />
+                  <Input type="text" placeholder="Text input" value={this.state.teste}/>
                 </Control>
-                <Help>
-                  Nome do grupo muscular ex. peito, costas, perna ...{" "}
-                </Help>
+                <Help>Nome do grupo muscular ex. peito, costas, perna ...</Help>
               </Field>
             </Column>
             <Column>
@@ -47,7 +57,11 @@ export default class Grupo extends Component {
           </Column.Group>
           <Column.Group>
             <Column>
-              <Button outlined color="primary">
+              <Button
+                outlined
+                color="primary"
+                onClick={this.gravarGrupoMuscular}
+              >
                 Gravar
               </Button>
             </Column>
