@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import api from "../../services/api";
 import {
   Button,
   Container,
@@ -8,16 +9,23 @@ import {
   Control,
   Help,
   Field,
-  Input
+  Input,
+  Table
 } from "rbx";
 import MenuSuperior from "../../components/navbar";
 
 export default function Grupo() {
   const [teste, setTeste] = useState("");
+  const [lista, setLista] = useState([]);
 
-  function mensagem() {
-    alert(teste);
-  }
+  useEffect(() => {
+    async function lisitarGrupos() {
+      const resp = await api.get("grupomuscular");
+      console.log(resp.data);
+      setLista(resp.data);
+    }
+    lisitarGrupos();
+  }, []);
 
   return (
     <div>
@@ -49,15 +57,30 @@ export default function Grupo() {
             </Field>
           </Column>
         </Column.Group>
-        <Column.Group>
-          <Column></Column>
-        </Column.Group>
         <Button.Group align="right">
-          <Button color="primary" onClick={mensagem}>
-            Gravar
-          </Button>
+          <Button color="primary">Gravar</Button>
           <Button color="danger">Limpar</Button>
         </Button.Group>
+        <Column.Group>
+          <Column>
+            <Table>
+              <Table.Head>
+                <Table.Row>
+                  <Table.Cell>Nome</Table.Cell>
+                  <Table.Cell>Descricao</Table.Cell>
+                </Table.Row>
+              </Table.Head>
+              <Table.Body>
+                {lista.map(item => (
+                  <Table.Row key={item.id}>
+                    <Table.Cell>{item.nome}</Table.Cell>
+                    <Table.Cell>{item.descricao}</Table.Cell>
+                  </Table.Row>
+                ))}
+              </Table.Body>
+            </Table>
+          </Column>
+        </Column.Group>
       </Container>
     </div>
   );
