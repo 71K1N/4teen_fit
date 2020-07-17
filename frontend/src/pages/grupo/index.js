@@ -15,8 +15,10 @@ import {
 import MenuSuperior from "../../components/navbar";
 
 export default function Grupo() {
-  const [teste, setTeste] = useState("");
+  
   const [lista, setLista] = useState([]);
+  const [nome, setNome] = useState("");
+  const [descricao, setDescricao] = useState("");
 
   useEffect(() => {
     async function lisitarGrupos() {
@@ -26,6 +28,10 @@ export default function Grupo() {
     }
     lisitarGrupos();
   }, []);
+
+  function store(){
+    api.post('grupomuscular',{nome,descricao}).then(response=>(console.log(response.data)))
+  }
 
   return (
     <div>
@@ -40,8 +46,8 @@ export default function Grupo() {
               <Control>
                 <Input
                   type="text"
-                  value={teste}
-                  onChange={e => setTeste(e.target.value)}
+                  value={nome}
+                  onChange={e => setNome(e.target.value)}
                 ></Input>
               </Control>
               <Help>Nome do grupo muscular</Help>
@@ -51,19 +57,23 @@ export default function Grupo() {
             <Field>
               <Label>Descricao</Label>
               <Control>
-                <Input type="text"></Input>
+                <Input
+                  value={descricao}
+                  onChange={e => setDescricao(e.target.value)}
+                  type="text"
+                ></Input>
               </Control>
               <Help>Descricao do grupo muscular</Help>
             </Field>
           </Column>
         </Column.Group>
         <Button.Group align="right">
-          <Button color="primary">Gravar</Button>
+          <Button color="primary" onClick={store}>Gravar</Button>
           <Button color="danger">Limpar</Button>
         </Button.Group>
         <Column.Group>
           <Column>
-            <Table>
+            <Table fullwidth>
               <Table.Head>
                 <Table.Row>
                   <Table.Cell>Nome</Table.Cell>
