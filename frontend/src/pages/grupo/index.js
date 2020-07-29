@@ -15,22 +15,31 @@ import {
 import MenuSuperior from "../../components/navbar";
 
 export default function Grupo() {
-  
   const [lista, setLista] = useState([]);
   const [nome, setNome] = useState("");
   const [descricao, setDescricao] = useState("");
 
   useEffect(() => {
-    async function lisitarGrupos() {
-      const resp = await api.get("grupomuscular");
-      console.log(resp.data);
-      setLista(resp.data);
-    }
-    lisitarGrupos();
+    listarGrupos();
   }, []);
 
-  function store(){
-    api.post('grupomuscular',{nome,descricao}).then(response=>(console.log(response.data)))
+  function store() {
+    api.post("grupomuscular", { nome, descricao }).then(response => {
+      alert("Dado cadastrado com sucesso!!");
+      listarGrupos();
+      limparCampos();
+    });
+  }
+
+  async function listarGrupos() {
+    const resp = await api.get("grupomuscular");
+    console.log(resp.data);
+    setLista(resp.data);
+  }
+
+  function limparCampos() {
+    setNome("");
+    setDescricao("");
   }
 
   return (
@@ -68,8 +77,12 @@ export default function Grupo() {
           </Column>
         </Column.Group>
         <Button.Group align="right">
-          <Button color="primary" onClick={store}>Gravar</Button>
-          <Button color="danger">Limpar</Button>
+          <Button color="primary" onClick={store}>
+            Gravar
+          </Button>
+          <Button color="danger" onClick={limparCampos}>
+            Limpar
+          </Button>
         </Button.Group>
         <Column.Group>
           <Column>
