@@ -8,7 +8,10 @@ class GrupoMuscular {
 
   //  - create
   async create(req, res) {
-    const { nome, descricao } = req.body;
+    const {
+      nome,
+      descricao
+    } = req.body;
 
     const [id] = await conexao("grupoMuscular").insert({
       nome,
@@ -19,8 +22,13 @@ class GrupoMuscular {
 
   //  -  update
   async update(req, res) {
-    const { id } = req.params;
-    const { nome, descricao } = req.body;
+    const {
+      id
+    } = req.params;
+    const {
+      nome,
+      descricao
+    } = req.body;
 
     const ret = await conexao("grupoMuscular")
       .where({
@@ -35,7 +43,9 @@ class GrupoMuscular {
 
   //  - select
   async select(req, res) {
-    const { id } = req.params;
+    const {
+      id
+    } = req.params;
     const dados = await conexao("grupoMuscular").where({
       id
     });
@@ -43,9 +53,15 @@ class GrupoMuscular {
   }
 
   //  - delete
-  async delete(req, res) {
-    const { id } = req.params;
-    await conexao("");
+  async remove(req, res) {
+    const {
+      id
+    } = req.params;
+    const removed = await conexao("grupoMuscular").where("id", id).del();
+    res.status(200).json({
+      removed,
+      "message": (removed ? "item removido" : "nao removido")
+    })
   }
 }
 module.exports = GrupoMuscular;

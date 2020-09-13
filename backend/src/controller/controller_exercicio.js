@@ -11,6 +11,9 @@ module.exports.autoroute = {
   },
   put: {
     "/exercicio/:id": update
+  },
+  delete: {
+    "/exercicio/:id": remove
   }
 };
 
@@ -28,4 +31,8 @@ function update(req, res) {
 
 function select(req, res) {
   exercicio.select(req, res)
+}
+
+function remove(req, res) {
+  exercicio.remove(req, res)
 }

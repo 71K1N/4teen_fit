@@ -53,7 +53,17 @@ class Exercicio {
       id
     })
     res.status(200).json(dados)
-
+  }
+  // - remove
+  async remove(req, res) {
+    const {
+      id
+    } = req.params
+    const removed = await conexao("exercicio").where('id', id).del()
+    res.status(200).json({
+      removed,
+      "mensagem": removed ? "removido" : "item nao removido"
+    })
   }
 }
 module.exports = Exercicio;

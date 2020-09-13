@@ -11,7 +11,7 @@ import {
   Help,
   Field,
   Select,
-  Button
+  Button,
 } from "rbx";
 import MenuSuperior from "../../components/navbar";
 
@@ -35,6 +35,7 @@ function Exercicio() {
 
   function selecionarGrupo(e) {
     setSelectedGroup(e);
+    console.log(selectedGroup)
   }
 
   //  - STORE
@@ -43,9 +44,9 @@ function Exercicio() {
       .post("exercicio", {
         nome: nomeExercicio,
         descricao: descricaoExercicio,
-        id_grupoMuscular: selectedGroup
+        id_grupoMuscular: selectedGroup,
       })
-      .then(response => {
+      .then((response) => {
         alert("Dado cadastrado com sucesso!!");
         //limparCampos();
         listarExercicios();
@@ -54,8 +55,21 @@ function Exercicio() {
 
   //  - LISTAR EXERCICIOS
   async function listarExercicios() {
-    await api.get("exercicio").then(response => {
+    await api.get("exercicio").then((response) => {
       setExercicios(response.data);
+    });
+  }
+
+  //  - REMOVER EXERCICIO
+  async function remover(id) {
+    await api.delete("exercicio/"+id).then((response) => {
+      const { removed } = response.data;
+      if (removed) {
+        listarExercicios();
+        alert("item removido com sucesso!!");
+      } else {
+        alert("O exercicio nao removido!!");
+      }
     });
   }
 
@@ -65,57 +79,56 @@ function Exercicio() {
       <Container>
         <Column.Group centered>
           <Column>
-            <Title size={3}>Cadastro de Exercicio</Title>
+            <Title size={3}> Cadastro de Exercicio </Title>
           </Column>
         </Column.Group>
         <Column.Group>
           <Column>
             <Field>
-              <Label>Nome</Label>
+              <Label> Nome </Label>
               <Control>
                 <Input
                   type="text"
                   value={nomeExercicio}
-                  onChange={e => {
+                  onChange={(e) => {
                     setNomeExercicio(e.target.value);
                   }}
                 />
               </Control>
-              <Help>Nome do exercicio</Help>
+              <Help> Nome do exercicio </Help>
             </Field>
           </Column>
           <Column>
             <Field>
-              <Label>Descricao</Label>
+              <Label> Descricao </Label>
               <Control>
                 <Input
                   type="text"
                   value={descricaoExercicio}
-                  onChange={e => {
+                  onChange={(e) => {
                     setDescricaoExercicio(e.target.value);
                   }}
                 ></Input>
               </Control>
-              <Help>Descricao do exercicio</Help>
+              <Help> Descricao do exercicio </Help>
             </Field>
           </Column>
           <Column>
             <Field>
-              <Label>Grupo</Label>
+              <Label> Grupo </Label>
               <Control>
                 <Select.Container>
-                  <Select
-                    value={selectedGroup}
-                    onChange={e => {
+                  <Select                    
+                    onInputChange={(e) => {
                       selecionarGrupo(e.target.value);
                     }}
                   >
-                    {grupos.map(grupo => (
+                    {grupos.map((grupo) => (
                       <Select.Option key={grupo.id} value={grupo.id}>
                         {grupo.nome}
                       </Select.Option>
                     ))}
-                    <Select.Option value="23">teste</Select.Option>
+                    <Select.Option value="23" defaultValue> teste </Select.Option>
                   </Select>
                 </Select.Container>
               </Control>
@@ -135,15 +148,26 @@ function Exercicio() {
             <Table fullwidth bordered striped>
               <Table.Head>
                 <Table.Row>
-                  <Table.Cell>Nome</Table.Cell>
-                  <Table.Cell>Descricao</Table.Cell>
+                  <Table.Cell> Nome </Table.Cell>
+                  <Table.Cell> Descricao </Table.Cell>
+                  <Table.Cell>Excluir </Table.Cell>
                 </Table.Row>
               </Table.Head>
               <Table.Body>
-                {exercicios.map(item => (
+                {exercicios.map((item) => (
                   <Table.Row key={item.id}>
-                    <Table.Cell>{item.nome}</Table.Cell>
-                    <Table.Cell>{item.descricao}</Table.Cell>
+                    <Table.Cell> {item.nome} </Table.Cell>
+                    <Table.Cell> {item.descricao} </Table.Cell>
+                    <Table.Cell>
+                      <Button
+                        color="danger"
+                        onClick={() => {
+                          remover(item.id);
+                        }}
+                      >
+                        Excluir
+                      </Button>
+                    </Table.Cell>
                   </Table.Row>
                 ))}
               </Table.Body>

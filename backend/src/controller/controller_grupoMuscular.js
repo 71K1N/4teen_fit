@@ -11,17 +11,28 @@ module.exports.autoroute = {
   },
   put: {
     "/grupomuscular/:id": update
+  },
+  delete: {
+    "/grupomuscular/:id": remove
   }
 };
-function create (req, res) {
+
+function create(req, res) {
   grupo.create(req, res)
 }
+
 function index(req, res) {
   grupo.index(req, res)
 }
+
 function update(req, res) {
   grupo.update(req, res)
 }
+
 function select(req, res) {
   grupo.select(req, res)
+}
+
+function remove(req, res) {
+  grupo.remove(req, res)
 }

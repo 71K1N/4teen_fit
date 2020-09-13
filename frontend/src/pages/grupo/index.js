@@ -10,7 +10,7 @@ import {
   Help,
   Field,
   Input,
-  Table
+  Table,
 } from "rbx";
 import MenuSuperior from "../../components/navbar";
 
@@ -24,7 +24,7 @@ export default function Grupo() {
   }, []);
 
   function store() {
-    api.post("grupomuscular", { nome, descricao }).then(response => {
+    api.post("grupomuscular", { nome, descricao }).then((response) => {
       alert("Dado cadastrado com sucesso!!");
       listarGrupos();
       limparCampos();
@@ -42,6 +42,16 @@ export default function Grupo() {
     setDescricao("");
   }
 
+  async function remove(id) {
+    await api.delete("grupomuscular/" + id).then((response) => {
+      const result = response.data.removed;
+      if (result) {
+        listarGrupos();
+      }
+      console.log(response.data.removed);
+    });
+  }
+
   return (
     <div>
       <MenuSuperior />
@@ -56,7 +66,7 @@ export default function Grupo() {
                 <Input
                   type="text"
                   value={nome}
-                  onChange={e => setNome(e.target.value)}
+                  onChange={(e) => setNome(e.target.value)}
                 ></Input>
               </Control>
               <Help>Nome do grupo muscular</Help>
@@ -68,7 +78,7 @@ export default function Grupo() {
               <Control>
                 <Input
                   value={descricao}
-                  onChange={e => setDescricao(e.target.value)}
+                  onChange={(e) => setDescricao(e.target.value)}
                   type="text"
                 ></Input>
               </Control>
@@ -91,13 +101,24 @@ export default function Grupo() {
                 <Table.Row>
                   <Table.Cell>Nome</Table.Cell>
                   <Table.Cell>Descricao</Table.Cell>
+                  <Table.Cell>Excluir</Table.Cell>
                 </Table.Row>
               </Table.Head>
               <Table.Body>
-                {lista.map(item => (
+                {lista.map((item) => (
                   <Table.Row key={item.id}>
                     <Table.Cell>{item.nome}</Table.Cell>
                     <Table.Cell>{item.descricao}</Table.Cell>
+                    <Table.Cell>
+                      <Button
+                        color="danger"
+                        onClick={() => {
+                          remove(item.id);
+                        }}
+                      >
+                        Excluir
+                      </Button>
+                    </Table.Cell>
                   </Table.Row>
                 ))}
               </Table.Body>

@@ -57,7 +57,6 @@ class ExercicioTreino {
       id
     })
     res.status(200).json(dados)
-
   }
 }
 module.exports = ExercicioTreino;
