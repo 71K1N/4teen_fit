@@ -35,7 +35,7 @@ function Exercicio() {
 
   function selecionarGrupo(e) {
     setSelectedGroup(e);
-    console.log(selectedGroup)
+    console.log(selectedGroup);
   }
 
   //  - STORE
@@ -62,7 +62,7 @@ function Exercicio() {
 
   //  - REMOVER EXERCICIO
   async function remover(id) {
-    await api.delete("exercicio/"+id).then((response) => {
+    await api.delete("exercicio/" + id).then((response) => {
       const { removed } = response.data;
       if (removed) {
         listarExercicios();
@@ -71,6 +71,11 @@ function Exercicio() {
         alert("O exercicio nao removido!!");
       }
     });
+  }
+
+  function limparCampos() {
+    setNomeExercicio("");
+    setDescricaoExercicio("");
   }
 
   return (
@@ -118,17 +123,16 @@ function Exercicio() {
               <Label> Grupo </Label>
               <Control>
                 <Select.Container>
-                  <Select                    
+                  <Select
                     onInputChange={(e) => {
                       selecionarGrupo(e.target.value);
-                    }}
-                  >
+                    }}>
+                    <Select.Option Selected value="">Selecione</Select.Option>
                     {grupos.map((grupo) => (
                       <Select.Option key={grupo.id} value={grupo.id}>
                         {grupo.nome}
                       </Select.Option>
-                    ))}
-                    <Select.Option value="23" defaultValue> teste </Select.Option>
+                    ))}                    
                   </Select>
                 </Select.Container>
               </Control>
@@ -139,7 +143,7 @@ function Exercicio() {
           <Button color="primary" onClick={store}>
             Gravar
           </Button>
-          <Button color="danger" onClick={() => {}}>
+          <Button color="danger" onClick={limparCampos}>
             Limpar
           </Button>
         </Button.Group>
@@ -150,7 +154,7 @@ function Exercicio() {
                 <Table.Row>
                   <Table.Cell> Nome </Table.Cell>
                   <Table.Cell> Descricao </Table.Cell>
-                  <Table.Cell>Excluir </Table.Cell>
+                  <Table.Cell>Excluir/Editar </Table.Cell>
                 </Table.Row>
               </Table.Head>
               <Table.Body>
