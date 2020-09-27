@@ -20,6 +20,7 @@ function Exercicio() {
   const [exercicios, setExercicios] = useState([]);
   const [selectedGroup, setSelectedGroup] = useState("");
   const [nomeExercicio, setNomeExercicio] = useState("");
+  const [id, setId] = useState("");
   const [descricaoExercicio, setDescricaoExercicio] = useState("");
 
   useEffect(() => {
@@ -40,17 +41,31 @@ function Exercicio() {
 
   //  - STORE
   async function store() {
-    await api
-      .post("exercicio", {
-        nome: nomeExercicio,
-        descricao: descricaoExercicio,
-        id_grupoMuscular: selectedGroup,
-      })
-      .then((response) => {
-        alert("Dado cadastrado com sucesso!!");
-        //limparCampos();
-        listarExercicios();
-      });
+    if (!id) {
+      await api
+        .post("exercicio", {
+          nome: nomeExercicio,
+          descricao: descricaoExercicio,
+          id_grupoMuscular: selectedGroup,
+        })
+        .then((response) => {
+          alert("Dado cadastrado com sucesso!!");
+          limparCampos();
+          listarExercicios();
+        });
+    } else {
+      await api
+        .put("exercicio/" + id, {
+          nome: nomeExercicio,
+          descricao: descricaoExercicio,
+          id_grupoMuscular: selectedGroup,
+        })
+        .then((response) => {
+          alert("Dado atualizado com sucesso!!");
+          limparCampos();
+          listarExercicios();
+        });
+    }
   }
 
   //  - LISTAR EXERCICIOS
@@ -74,8 +89,18 @@ function Exercicio() {
   }
 
   function limparCampos() {
+    setId("");
     setNomeExercicio("");
     setDescricaoExercicio("");
+    setSelectedGroup("");
+  }
+
+  //  - editar
+  function editar(id, nome, descricao, grupo) {
+    setId(id);
+    setNomeExercicio(nome);
+    setDescricaoExercicio(descricao);
+    setSelectedGroup(grupo);
   }
 
   return (
@@ -88,6 +113,28 @@ function Exercicio() {
           </Column>
         </Column.Group>
         <Column.Group>
+          <Column>
+            <Field>
+              <Label> Grupo </Label>
+              <Control>
+                <Select.Container>
+                  <Select
+                    value={selectedGroup}
+                    onChange={(e) => {
+                      selecionarGrupo(e.target.value);
+                    }}
+                  >
+                    <Select.Option value="">Selecione</Select.Option>
+                    {grupos.map((grupo) => (
+                      <Select.Option key={grupo.id} value={grupo.id}>
+                        {grupo.nome}
+                      </Select.Option>
+                    ))}
+                  </Select>
+                </Select.Container>
+              </Control>
+            </Field>
+          </Column>
           <Column>
             <Field>
               <Label> Nome </Label>
@@ -118,32 +165,12 @@ function Exercicio() {
               <Help> Descricao do exercicio </Help>
             </Field>
           </Column>
-          <Column>
-            <Field>
-              <Label> Grupo </Label>
-              <Control>
-                <Select.Container>
-                  <Select
-                    onInputChange={(e) => {
-                      selecionarGrupo(e.target.value);
-                    }}>
-                    <Select.Option Selected value="">Selecione</Select.Option>
-                    {grupos.map((grupo) => (
-                      <Select.Option key={grupo.id} value={grupo.id}>
-                        {grupo.nome}
-                      </Select.Option>
-                    ))}                    
-                  </Select>
-                </Select.Container>
-              </Control>
-            </Field>
-          </Column>
         </Column.Group>
-        <Button.Group align="left">
-          <Button color="primary" onClick={store}>
+        <Button.Group align="right">
+          <Button color="success" onClick={store}>
             Gravar
           </Button>
-          <Button color="danger" onClick={limparCampos}>
+          <Button color="warning" onClick={limparCampos}>
             Limpar
           </Button>
         </Button.Group>
@@ -163,14 +190,31 @@ function Exercicio() {
                     <Table.Cell> {item.nome} </Table.Cell>
                     <Table.Cell> {item.descricao} </Table.Cell>
                     <Table.Cell>
-                      <Button
-                        color="danger"
-                        onClick={() => {
-                          remover(item.id);
-                        }}
-                      >
-                        Excluir
-                      </Button>
+                      <Button.Group>
+                        <Button
+                          outlined
+                          color="danger"
+                          onClick={() => {
+                            remover(item.id);
+                          }}
+                        >
+                          Excluir
+                        </Button>{" "}
+                        <Button
+                          outlined
+                          color="primary"
+                          onClick={() => {
+                            editar(
+                              item.id,
+                              item.nome,
+                              item.descricao,
+                              item.id_grupoMuscular
+                            );
+                          }}
+                        >
+                          Editar
+                        </Button>
+                      </Button.Group>
                     </Table.Cell>
                   </Table.Row>
                 ))}
