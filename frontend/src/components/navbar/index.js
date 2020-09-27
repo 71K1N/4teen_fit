@@ -33,15 +33,7 @@ export default class MenuSuperior extends Component {
               </Navbar.Dropdown>
             </Navbar.Item>
           </Navbar.Segment>
-          <Navbar.Segment align="end">
-            <Navbar.Item>
-              <Button.Group>
-                <Button color="primary">
-                  <strong> Sign up </strong>
-                </Button>
-                <Button color="light"> Log in </Button>
-              </Button.Group>
-            </Navbar.Item>
+          <Navbar.Segment align="end">            
           </Navbar.Segment>
         </Navbar.Menu>
       </Navbar>
